@@ -12,13 +12,13 @@ public class consoleLauncher extends launcher {
 
     private consoleLauncher() {
         launcher = this;
+        new Secretary(launcher);
     }
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
         new consoleLauncher();
 
-        new Secretary(launcher);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class consoleLauncher extends launcher {
     @Override
     public String getMessage() {
         System.out.println("Введите ответ: ");
-        return scanner.next();
+        return scanner.nextLine();
     }
 
     @Override
