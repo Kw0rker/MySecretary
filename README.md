@@ -1,7 +1,9 @@
-# This app allows getting messeges from vk,and reply from consloe
-upcoming features :
-  improve replyBot
-  create nerual network for better replys
-  interface for windows
-  get messege permission from vk support
+# MySecretary
+This app allows you to set up a auto reply for incoming vk messages
+
+incoming features(TBD):
+    redirect messages to other services such as email etc
+     function to check if user is online
+     setting different reply for different messages such as audio ,file etc
+     
   
