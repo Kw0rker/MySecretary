@@ -2,20 +2,23 @@ package Launchers;
 
 
 import Secretary.Secretary;
+import org.apache.log4j.BasicConfigurator;
 
 import java.util.Scanner;
 
 public class consoleLauncher extends launcher {
-    static Launchers.launcher launcher;
-    Scanner scanner=new Scanner(System.in);
+    static private Launchers.launcher launcher;
+    private Scanner scanner = new Scanner(System.in);
+
+    private consoleLauncher() {
+        launcher = this;
+    }
+
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         new consoleLauncher();
 
         new Secretary(launcher);
-    }
-
-    public consoleLauncher() {
-        launcher=this;
     }
 
     @Override
