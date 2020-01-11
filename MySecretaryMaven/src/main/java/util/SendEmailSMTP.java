@@ -20,7 +20,7 @@ public class SendEmailSMTP implements Redirect {
     private static final String EMAIL_TO_CC = "";
 
 
-    public boolean sendEmail(String EMAIL_TO, String EMAIL_SUBJECT, String EMAIL_TEXT) {
+    private boolean sendEmail(String EMAIL_TO, String EMAIL_SUBJECT, String EMAIL_TEXT) {
         Properties prop = System.getProperties();
         prop.put("mail.smtp.host", SMTP_SERVER); //optional, defined in SMTPTransport
         prop.put("mail.smtp.auth", "true");
@@ -70,7 +70,7 @@ public class SendEmailSMTP implements Redirect {
     }
 
     @Override
-    public void redirectMessage(String Message, Secretary secretary) {
-        this.sendEmail(secretary.getEmail(), "Redirect from vk", Message);
+    public void redirectMessage(String Message, String name, Secretary secretary) {
+        this.sendEmail(secretary.getEmail(), name, Message);
     }
 }

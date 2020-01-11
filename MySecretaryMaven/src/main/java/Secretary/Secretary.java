@@ -12,7 +12,8 @@ import java.util.LinkedList;
 public class Secretary {
     private boolean userIsHere=false;
     private static ReplyBot replyBot=new ReplyBot();
-    launcher launcher;
+    static boolean working;
+    public launcher launcher;
     private LinkedList<Redirect> redirects = new LinkedList<>();
     private String email = "mixteamlp@gmail.com";
     public Secretary(launcher launcher) {
@@ -21,23 +22,11 @@ public class Secretary {
         launcher.printMessage("Задайте сообщение для авто ответов");
         replyBot.setReply(launcher.getMessage());
         VkBot bot = new VkBot(VkOauth.getAccessToken(launcher), replyBot, this);
-        Thread ListenForNewMessagesThread =new Thread(() -> {
-            while (launcher.working){
-                try {
-                    Thread.sleep(10000);
-                    if (userIsHere)VkBot.setAnswerable(launcher);
-                    else VkBot.setAnswerable(replyBot);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        ListenForNewMessagesThread.start();
 
     }
 
-    public void redirect(String message) {
-        for (Redirect service : redirects) service.redirectMessage(message, this);
+    public void redirect(String message, String name) {
+        for (Redirect service : redirects) service.redirectMessage(message, name, this);
     }
 
     public String getEmail() {

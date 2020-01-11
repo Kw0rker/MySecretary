@@ -19,6 +19,7 @@ public class VkOauth {
         return params;
     }
 
+    private static int id;
     public static String getAccessToken(launcher Launcher){
         URL url = null;
         HttpURLConnection con=null;
@@ -28,7 +29,13 @@ public class VkOauth {
                 Desktop.getDesktop().browse(new URI(request));
             }
             Launcher.printMessage("После подтверждения  скопируйте и вставьте ссылку: ");
-            params=Launcher.getMessage().split("access_token=");
+            String link = Launcher.getMessage();
+            params = link.split("access_token=");
+            try {
+                id = Integer.parseInt(link.split("user_id=")[1].split("&")[0]);
+            } catch (Exception e) {
+                return null;
+            }
             try {
                 return params[1].split("&")[0];
             }
