@@ -10,11 +10,13 @@ import com.petersamokhin.bots.sdk.utils.web.Connection;
 public class VkBot extends User  {
     private Secretary secretary;
     private answerable Answerable;
-    private String key;
+    private static String key = "1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63";
     private int vk_id;
-    public VkBot(String key, answerable answerable, Secretary secretary) {
+
+    public VkBot(String key, int vk_id, answerable answerable, Secretary secretary) {
         super(key);
-        this.key = key;
+        VkBot.key = key;
+        this.vk_id = vk_id;
         this.secretary = secretary;
         Answerable=answerable;
 
@@ -25,13 +27,14 @@ public class VkBot extends User  {
                     .to(message.authorId())
                     .text(Answerable.respond(message.getText()))
                     .send();
-            VkUser user = getUserById(id, key);
-            secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
+            VkUser user = getUserById(id);
+            if (!getUserById(vk_id).isOnline())
+                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
         });
         while (true) {
             try {
                 Thread.sleep(10000);
-                if (getUserById(vk_id, key).isOnline()) setAnswerable(secretary.launcher);
+                if (getUserById(vk_id).isOnline()) setAnswerable(secretary.launcher);
                 else setAnswerable(answerable);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -40,9 +43,11 @@ public class VkBot extends User  {
 
     }
 
-    public static VkUser getUserById(int id, String key) {
-        String request = "https://api.vk.com/method/users.get?params[user_ids]=" + id + "&params[fields]=online&params[name_case]=Nom&access_token=" + key + "&v=5.103";
+    public static VkUser getUserById(int id) {
+        String request = "https://api.vk.com/method/users.get?access_token=1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63&user_id=" + id + "&fields=online&v=5.00";
         String respond = Connection.getRequestResponse(request);
+        System.out.println(id);
+        System.out.println(respond);
         try {
             String name = respond.split("\"first_name\":\"")[1].split("\",")[0];
             try {
@@ -64,7 +69,4 @@ public class VkBot extends User  {
         Answerable = answerable;
     }
 
-    public void setVkId(int id) {
-        this.vk_id = id;
-    }
 }

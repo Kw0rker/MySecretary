@@ -16,12 +16,14 @@ public class Secretary {
     public launcher launcher;
     private LinkedList<Redirect> redirects = new LinkedList<>();
     private String email = "mixteamlp@gmail.com";
+    private VkBot bot;
     public Secretary(launcher launcher) {
         this.launcher = launcher;
         redirects.add(new SendEmailSMTP());
         launcher.printMessage("Задайте сообщение для авто ответов");
         replyBot.setReply(launcher.getMessage());
-        VkBot bot = new VkBot(VkOauth.getAccessToken(launcher), replyBot, this);
+        VkOauth vkOauth = new VkOauth();
+        bot = new VkBot(vkOauth.getAccessToken(launcher), vkOauth.getId(), replyBot, this);
 
     }
 
@@ -31,5 +33,9 @@ public class Secretary {
 
     public String getEmail() {
         return email;
+    }
+
+    public VkBot getBot() {
+        return bot;
     }
 }

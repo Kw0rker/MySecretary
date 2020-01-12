@@ -15,12 +15,14 @@ public class VkOauth {
     private final static String  redirect_uri ="https://oauth.vk.com/blank.html";
     private final static String request ="https://oauth.vk.com/authorize?client_id="+ app_id +"&display=popup&redirect_uri="+redirect_uri+"&scope=messages,offline&response_type=token&v=5.103&state=123456";
     private static String[] params;
+    private String link;
     public static String[] getParams() {
         return params;
     }
 
     private static int id;
-    public static String getAccessToken(launcher Launcher){
+
+    public String getAccessToken(launcher Launcher) {
         URL url = null;
         HttpURLConnection con=null;
         try {
@@ -29,13 +31,8 @@ public class VkOauth {
                 Desktop.getDesktop().browse(new URI(request));
             }
             Launcher.printMessage("После подтверждения  скопируйте и вставьте ссылку: ");
-            String link = Launcher.getMessage();
+            link = Launcher.getMessage();
             params = link.split("access_token=");
-            try {
-                id = Integer.parseInt(link.split("user_id=")[1].split("&")[0]);
-            } catch (Exception e) {
-                return null;
-            }
             try {
                 return params[1].split("&")[0];
             }
@@ -48,5 +45,15 @@ public class VkOauth {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public int getId() {
+        try {
+            id = Integer.parseInt(link.split("user_id=")[1].split("&")[0]);
+            return id;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }
