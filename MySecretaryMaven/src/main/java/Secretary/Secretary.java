@@ -23,7 +23,8 @@ public class Secretary {
         launcher.printMessage("Задайте сообщение для авто ответов");
         replyBot.setReply(launcher.getMessage());
         VkOauth vkOauth = new VkOauth();
-        bot = new VkBot(vkOauth.getAccessToken(launcher), vkOauth.getId(), replyBot, this);
+        String token = vkOauth.getAccessToken(launcher);
+        bot = new VkBot(token, vkOauth.getId(), replyBot.getInstance(), this);
 
     }
 

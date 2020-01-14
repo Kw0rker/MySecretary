@@ -22,10 +22,15 @@ public class VkBot extends User  {
 
         onSimpleTextMessage(message -> {
             int id = message.authorId();
+            String reply = Answerable.respond(message.getText());
+            while (reply == null || reply.equals("")) {
+                Answerable.restart();
+                reply = Answerable.respond(message.getText());
+            }
             new Message()
                     .from(this)
                     .to(message.authorId())
-                    .text(Answerable.respond(message.getText()))
+                    .text(reply)
                     .send();
             VkUser user = getUserById(id);
             if (!getUserById(vk_id).isOnline())

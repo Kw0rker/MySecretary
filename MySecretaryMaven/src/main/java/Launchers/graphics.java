@@ -44,4 +44,9 @@ public class graphics extends launcher {
     public String respond(String message) {
         return null;
     }
+
+    @Override
+    public void restart() {
+
+    }
 }

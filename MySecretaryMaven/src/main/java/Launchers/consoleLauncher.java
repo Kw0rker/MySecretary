@@ -37,4 +37,9 @@ public class consoleLauncher extends launcher {
         this.printMessage(message);
         return this.getMessage();
     }
+
+    @Override
+    public void restart() {
+
+    }
 }
