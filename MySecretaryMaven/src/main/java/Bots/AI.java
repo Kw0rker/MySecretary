@@ -1,6 +1,6 @@
 package Bots;
 
-import answerable.answerable;
+import interfaces.answerable;
 import util.CleverParser;
 
 import java.io.IOException;

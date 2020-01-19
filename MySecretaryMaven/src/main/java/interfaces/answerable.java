@@ -1,4 +1,4 @@
-package answerable;
+package interfaces;
 
 
 public interface answerable {

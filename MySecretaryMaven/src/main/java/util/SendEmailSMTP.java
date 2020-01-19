@@ -1,8 +1,8 @@
 package util;
 
 import Secretary.Secretary;
-import answerable.Redirect;
 import com.sun.mail.smtp.SMTPTransport;
+import interfaces.Redirect;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;

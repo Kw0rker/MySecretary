@@ -9,7 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class VkOauth {
+class VkOauth {
     private final static String app_id ="2685278";
     public static String tmp = "hHbJug59sKJie78wjrH8";
     private final static String  redirect_uri ="https://oauth.vk.com/blank.html";
@@ -22,7 +22,7 @@ public class VkOauth {
 
     private static int id;
 
-    public String getAccessToken(launcher Launcher) {
+    String getAccessToken(launcher Launcher) {
         URL url = null;
         HttpURLConnection con=null;
         try {
@@ -47,7 +47,7 @@ public class VkOauth {
         return null;
     }
 
-    public int getId() {
+    int getId() {
         try {
             id = Integer.parseInt(link.split("user_id=")[1].split("&")[0]);
             return id;

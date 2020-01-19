@@ -1,4 +1,4 @@
-package answerable;
+package interfaces;
 
 import Secretary.Secretary;
 

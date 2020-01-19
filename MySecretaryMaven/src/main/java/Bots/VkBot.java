@@ -2,50 +2,23 @@ package Bots;
 
 import Secretary.Secretary;
 import Vk.VkUser;
-import answerable.answerable;
 import com.petersamokhin.bots.sdk.clients.User;
 import com.petersamokhin.bots.sdk.objects.Message;
 import com.petersamokhin.bots.sdk.utils.web.Connection;
+import interfaces.answerable;
 
-public class VkBot extends User  {
+public class VkBot extends User implements bot {
     private Secretary secretary;
     private answerable Answerable;
     private static String key = "1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63";
-    private int vk_id;
+    private int id;
 
-    public VkBot(String key, int vk_id, answerable answerable, Secretary secretary) {
+    public VkBot(String key, int id, answerable answerable, Secretary secretary) {
         super(key);
         VkBot.key = key;
-        this.vk_id = vk_id;
+        this.id = id;
         this.secretary = secretary;
         Answerable=answerable;
-
-        onSimpleTextMessage(message -> {
-            int id = message.authorId();
-            String reply = Answerable.respond(message.getText());
-            while (reply == null || reply.equals("")) {
-                Answerable.restart();
-                reply = Answerable.respond(message.getText());
-            }
-            new Message()
-                    .from(this)
-                    .to(message.authorId())
-                    .text(reply)
-                    .send();
-            VkUser user = getUserById(id);
-            if (!getUserById(vk_id).isOnline())
-                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
-        });
-        while (true) {
-            try {
-                Thread.sleep(10000);
-                if (getUserById(vk_id).isOnline()) setAnswerable(secretary.launcher);
-                else setAnswerable(answerable);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 
     public static VkUser getUserById(int id) {
@@ -74,4 +47,37 @@ public class VkBot extends User  {
         Answerable = answerable;
     }
 
+    @Override
+    public void run(String key, int id, answerable answerable, Secretary secretary, Thread thread) {
+        onSimpleTextMessage(message -> {
+            int ID = message.authorId();
+            String reply = Answerable.respond(message.getText());
+            while (reply == null || reply.equals("")) {
+                Answerable.restart();
+                reply = Answerable.respond(message.getText());
+            }
+            new Message()
+                    .from(this)
+                    .to(message.authorId())
+                    .text(reply)
+                    .send();
+            VkUser user = getUserById(ID);
+            if (!getUserById(ID).isOnline())
+                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
+        });
+        onPhotoMessage(message -> new Message()
+                .from(this)
+                .to(message.authorId())
+                .text("К сожалению функция распознавания фото еще не введена\n Но вы можете помочь мне тут-\nhttps://github.com/Kw0rker/MySecretary")
+                .send());
+        while (!thread.isInterrupted()) {
+            try {
+                Thread.sleep(10000);
+                if (getUserById(id).isOnline()) setAnswerable(secretary.launcher);
+                else setAnswerable(answerable);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

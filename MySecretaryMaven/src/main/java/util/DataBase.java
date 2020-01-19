@@ -1,5 +1,8 @@
 package util;
 
+import Bots.VkBot;
+import users.VkBotUser;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,6 +21,10 @@ public class DataBase {
         }
     }
 
-    public void insert() {
+    public void insert(VkBotUser user) {
+    }
+
+    public VkBot getUser(int id) {
+
     }
 }
