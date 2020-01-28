@@ -25,6 +25,6 @@ public class DataBase {
     }
 
     public VkBot getUser(int id) {
-
+        return null;
     }
 }

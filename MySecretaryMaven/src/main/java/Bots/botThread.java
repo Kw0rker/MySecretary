@@ -1,6 +1,7 @@
 package Bots;
 
 import Secretary.Secretary;
+import interfaces.bot;
 import javafx.util.Pair;
 import users.user;
 
@@ -32,5 +33,18 @@ public class botThread extends java.lang.Thread implements Runnable {
     @Override
     public int hashCode() {
         return id;
+    }
+
+    @Override
+    public void interrupt() {
+        isInterrupted = true;
+    }
+
+    public void Resume() {
+        isInterrupted = false;
+    }
+
+    public int getID() {
+        return this.id;
     }
 }

@@ -4,11 +4,13 @@ import Bots.ReplyBot;
 import Bots.VkBot;
 import Bots.botThread;
 import Launchers.launcher;
+import Vk.VkBotParser;
 import interfaces.Redirect;
 import javafx.util.Pair;
 import users.VkBotUser;
 import util.SendEmailSMTP;
 
+import java.io.FileWriter;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -20,12 +22,15 @@ public class Secretary {
     private LinkedList<Redirect> redirectsServices = new LinkedList<>();
     private VkBotUser user;
     private HashSet<botThread> threads = new HashSet<>();
+    FileWriter writer;
 
-    public Secretary(launcher launcher, VkBotUser user) {
+    public Secretary(launcher launcher) {
+
         this.launcher = launcher;
-        this.user = user;
+        // this.user = user;
         redirectsServices.add(new SendEmailSMTP());
-        replyBot.setReply(user.getReply());
+        //replyBot.setReply(user.getReply());
+        VkBotParser parser = new VkBotParser(this);
         //threads.add(new botThread(this,user));
 
     }
@@ -52,7 +57,21 @@ public class Secretary {
          */
     }
 
-    public void addNewUser(Pair<users.user, ? extends Bots.bot> pair) {
-        this.threads.add(new botThread(this, pair));
+    public void stopUser(int id) {
+        for (botThread thread : threads) {
+            if (thread.getID() == id) thread.interrupt();
+        }
+    }
+
+    public void resumeUser(int id) {
+        for (botThread thread : threads) {
+            if (thread.getID() == id) thread.Resume();
+        }
+    }
+
+    public void addNewUser(Pair<users.user, ? extends interfaces.bot> pair) {
+        boolean contains = false;
+        for (botThread thread : threads) if (thread.getID() == user.getId()) contains = true;
+        if (!contains) this.threads.add(new botThread(this, pair));
     }
 }

@@ -17,8 +17,8 @@ public class ReplyBot implements answerable {
 
     public void setReply(String reply) {
         instance = this;
-        if (!reply.equals("def")) this.reply = reply;
-        if (reply.equals("AI")) {
+        if (reply.equals("def")) this.reply = reply;
+        else if (reply.equals("AI")) {
             System.out.println("ai building started");
             instance = new AI();
             System.out.println("ai build finished");

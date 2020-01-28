@@ -13,10 +13,10 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-class VkBotParser implements SocketListener {
+public class VkBotParser implements SocketListener {
     private Secretary secretary;
 
-    VkBotParser(Secretary secretary) {
+    public VkBotParser(Secretary secretary) {
         this.secretary = secretary;
         SocketThread socketThread = new SocketThread(this, 24444);
     }
@@ -43,12 +43,28 @@ class VkBotParser implements SocketListener {
 
     @Override
     public String messageGet(String message) {
-        Gson gson = new Gson();
-        VkBotUser user = gson.fromJson(message, VkBotUser.class);
-        ReplyBot replyBot = new ReplyBot();
-        replyBot.setReply(user.getReply());
-        VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot, secretary);
-        secretary.addNewUser(new Pair<>(user, bot));
+        if (message.contains("stop")) {
+            try {
+                int id = Integer.parseInt(message.split("-")[1]);
+                secretary.stopUser(id);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } else if (message.contains("resume")) {
+            try {
+                int id = Integer.parseInt(message.split("-")[1]);
+                secretary.resumeUser(id);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Gson gson = new Gson();
+            VkBotUser user = gson.fromJson(message, VkBotUser.class);
+            ReplyBot replyBot = new ReplyBot();
+            replyBot.setReply(user.getReply());
+            VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), secretary);
+            secretary.addNewUser(new Pair<>(user, bot));
+        }
         return null;
     }
 }
