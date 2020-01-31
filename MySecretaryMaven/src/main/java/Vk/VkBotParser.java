@@ -43,6 +43,7 @@ public class VkBotParser implements SocketListener {
 
     @Override
     public String messageGet(String message) {
+        if (message == null) return null;
         if (message.contains("stop")) {
             try {
                 int id = Integer.parseInt(message.split("-")[1]);

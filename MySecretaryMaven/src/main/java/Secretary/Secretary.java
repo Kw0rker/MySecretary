@@ -8,9 +8,10 @@ import Vk.VkBotParser;
 import interfaces.Redirect;
 import javafx.util.Pair;
 import users.VkBotUser;
+import util.DataBase;
 import util.SendEmailSMTP;
 
-import java.io.FileWriter;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -22,11 +23,12 @@ public class Secretary {
     private LinkedList<Redirect> redirectsServices = new LinkedList<>();
     private VkBotUser user;
     private HashSet<botThread> threads = new HashSet<>();
-    FileWriter writer;
+    DataBase dataBase;
 
     public Secretary(launcher launcher) {
 
         this.launcher = launcher;
+        dataBase = new DataBase();
         // this.user = user;
         redirectsServices.add(new SendEmailSMTP());
         //replyBot.setReply(user.getReply());
@@ -70,8 +72,11 @@ public class Secretary {
     }
 
     public void addNewUser(Pair<users.user, ? extends interfaces.bot> pair) {
-        boolean contains = false;
-        for (botThread thread : threads) if (thread.getID() == user.getId()) contains = true;
-        if (!contains) this.threads.add(new botThread(this, pair));
+        try {
+            dataBase.insert((VkBotUser) pair.getKey());
+        } catch (SQLException e) {
+            return;//If any sql exception occurs dont create a new thread also if user is already in db
+        }
+        this.threads.add(new botThread(this, pair));
     }
 }

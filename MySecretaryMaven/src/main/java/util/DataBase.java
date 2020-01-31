@@ -12,26 +12,32 @@ public class DataBase {
 
     public DataBase() {
         try {
-            String myDriver = "org.gjt.mm.mysql.Driver";
-            String myUrl = "jdbc:mysql://localhost/test";
-            Class.forName(myDriver);
-            conn = DriverManager.getConnection(myUrl, "root", "");
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/vkbotusers?" +
+                    "user=root&password=Halflife3?");
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Exception occurred on connecting to database");
+            System.out.println("Exception occurred on connecting to database\n" + e.getMessage());
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
         }
     }
 
-    public void insert(VkBotUser user) {
-        try {
+    public void insert(VkBotUser user) throws SQLException {
             Statement statement = conn.createStatement();
             String email = user.getEmail();
             String accessToken = user.getAccessToken();
             int id = user.getId();
             String reply = user.getReply();
-            statement.executeUpdate("insert into vkBotUsers (email,accessToken,id,reply) values (`" + email + "`,`" + accessToken + "`,`+" + id + "`,`" + reply + "`)");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String request = "insert into bot_users  (email, accessToken, id, reply)" + " values (?,?,?,?)";
+        PreparedStatement preparedStatement = conn.prepareStatement(request);
+        preparedStatement.setString(1, email);
+        preparedStatement.setString(2, accessToken);
+        preparedStatement.setInt(3, id);
+        preparedStatement.setString(4, reply);
+        preparedStatement.execute();
     }
 
     public VkBot getUser(int id) {
