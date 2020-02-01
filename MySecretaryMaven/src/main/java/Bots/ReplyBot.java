@@ -4,7 +4,7 @@ import interfaces.answerable;
 
 public class ReplyBot implements answerable {
     String reply = "По всей видимости Руслан не в сети \nили же не его нет на месте.\nВаше сообшение перенаправленно на почту\n\n\n\n Вы можете помочь ему улучшить меня❤❤\nhttps://github.com/Kw0rker/MySecretary";
-    private static answerable instance;
+    private answerable instance;
     @Override
     public String respond(String message) {
         return reply;
@@ -22,7 +22,7 @@ public class ReplyBot implements answerable {
             System.out.println("ai building started");
             instance = new AI();
             System.out.println("ai build finished");
-        }
+        } else this.reply = reply;
     }
 
     public answerable getInstance() {

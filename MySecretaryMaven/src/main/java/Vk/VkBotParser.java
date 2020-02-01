@@ -60,6 +60,7 @@ public class VkBotParser implements SocketListener {
             }
         } else {
             Gson gson = new Gson();
+            System.out.println(message);
             VkBotUser user = gson.fromJson(message, VkBotUser.class);
             ReplyBot replyBot = new ReplyBot();
             replyBot.setReply(user.getReply());

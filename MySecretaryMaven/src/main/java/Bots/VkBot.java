@@ -11,12 +11,14 @@ import interfaces.bot;
 public class VkBot extends User implements bot {
     private Secretary secretary;
     private answerable Answerable;
-    private static String key = "1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63";
+    private answerable replyBot;
+    //private static String key = "1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63";
     private int id;
 
     public VkBot(String key, int id, answerable answerable, Secretary secretary) {
         super(key);
-        VkBot.key = key;
+        //VkBot.key = key;
+        replyBot = answerable;
         this.id = id;
         this.secretary = secretary;
         Answerable=answerable;
@@ -28,6 +30,7 @@ public class VkBot extends User implements bot {
         String respond = Connection.getRequestResponse(request);
         System.out.println(id);
         System.out.println(respond);
+        System.gc();
         try {
             String name = respond.split("\"first_name\":\"")[1].split("\",")[0];
             try {
@@ -77,8 +80,18 @@ public class VkBot extends User implements bot {
         checkUserOnline(id, secretary, thread);
     }
 
+    @Override
+    public void stop() {
+        Answerable = secretary.launcher;
+    }
+
+    @Override
+    public void resume() {
+        Answerable = replyBot;
+    }
+
     private void checkUserOnline(int id, Secretary secretary, Thread thread) {
-        if (!thread.isAlive()) return;
+        //if (!thread.isAlive()) return;
         while (!thread.isInterrupted()) {
             try {
                 Thread.sleep(10000);

@@ -11,9 +11,11 @@ public class botThread extends java.lang.Thread implements Runnable {
     private int id;
     //VkBot bot;
     private boolean isInterrupted = false;
+    private Pair<user, ? extends bot> pair;
 
     public botThread(Secretary secretary, Pair<user, ? extends bot> pair) {
         this.id = pair.getKey().getId();
+        this.pair = pair;
         ((Runnable) () -> {
             pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), secretary.getReplyBot().getInstance(), secretary, this);
         }).run();
@@ -38,10 +40,12 @@ public class botThread extends java.lang.Thread implements Runnable {
     @Override
     public void interrupt() {
         isInterrupted = true;
+        pair.getValue().stop();
     }
 
     public void Resume() {
         isInterrupted = false;
+        pair.getValue().resume();
     }
 
     public int getID() {
