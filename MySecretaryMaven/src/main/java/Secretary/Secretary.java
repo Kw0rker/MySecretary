@@ -6,8 +6,10 @@ import Bots.botThread;
 import Launchers.launcher;
 import Vk.VkBotParser;
 import interfaces.Redirect;
+import interfaces.bot;
 import javafx.util.Pair;
 import users.VkBotUser;
+import users.user;
 import util.DataBase;
 import util.SendEmailSMTP;
 
@@ -32,8 +34,10 @@ public class Secretary {
         // this.user = user;
         redirectsServices.add(new SendEmailSMTP());
         //replyBot.setReply(user.getReply());
+        setup();
         VkBotParser parser = new VkBotParser(this);
         //threads.add(new botThread(this,user));
+        //setup();
 
     }
 
@@ -54,9 +58,14 @@ public class Secretary {
     }
 
     private void setup() {
-        /*
-        goes through users list and setup a vk bot for them
-         */
+        HashSet<VkBotUser> users = dataBase.getAllUsers();
+        for (users.user user : users) {
+            ReplyBot replyBot = new ReplyBot();
+            replyBot.setReply(user.getReply());
+            VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), this);
+            Pair<user, bot> pair = new Pair<>(user, bot);
+            threads.add(new botThread(this, pair));
+        }
     }
 
     public void stopUser(int id) {
@@ -69,6 +78,13 @@ public class Secretary {
         for (botThread thread : threads) {
             if (thread.getID() == id) thread.Resume();
         }
+    }
+
+    public void changeReply(String reply, int id) {
+        for (botThread thread : threads) {
+            if (thread.getID() == id) thread.getBot().setReply(reply);
+        }
+
     }
 
     public void addNewUser(Pair<users.user, ? extends interfaces.bot> pair) {

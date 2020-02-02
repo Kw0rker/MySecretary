@@ -48,7 +48,7 @@ public class DataBase {
         HashSet<VkBotUser> users = new HashSet<>();
         try {
             Statement statement = conn.createStatement();
-            ResultSet set = statement.executeQuery("SELECT email,accessToken,id,reply FROM vkBotUsers");
+            ResultSet set = statement.executeQuery("SELECT email,accessToken,id,reply FROM bot_users");
             while (set.next()) {
                 String email = set.getString("email");
                 String accessToken = set.getString("accessToken");
@@ -60,5 +60,17 @@ public class DataBase {
             e.printStackTrace();
         }
         return users;
+    }
+
+    public void changeReply(String reply, int id) {
+        try {
+            String query = "update bot_users set reply = ? where id = ?";
+            PreparedStatement preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setString(1, reply);
+            preparedStmt.setInt(2, id);
+            preparedStmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

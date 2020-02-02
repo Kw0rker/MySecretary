@@ -12,6 +12,7 @@ public class VkBot extends User implements bot {
     private Secretary secretary;
     private answerable Answerable;
     private answerable replyBot;
+    boolean interrupted = false;
     //private static String key = "1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63";
     private int id;
 
@@ -21,6 +22,7 @@ public class VkBot extends User implements bot {
         replyBot = answerable;
         this.id = id;
         this.secretary = secretary;
+
         Answerable=answerable;
         System.out.println(Answerable.getClass().toString());
     }
@@ -63,14 +65,15 @@ public class VkBot extends User implements bot {
                 Answerable.restart();
                 reply = Answerable.respond(message.getText());
             }
+            VkUser user = getUserById(ID);
+            if (!user.isOnline())
+                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
             new Message()
                     .from(this)
                     .to(message.authorId())
                     .text(reply)
                     .send();
-            VkUser user = getUserById(ID);
-            if (!getUserById(ID).isOnline())
-                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
+
         });
         onPhotoMessage(message -> new Message()
                 .from(this)
@@ -83,21 +86,23 @@ public class VkBot extends User implements bot {
     @Override
     public void stop() {
         Answerable = secretary.launcher;
+        interrupted = true;
     }
 
     @Override
     public void resume() {
         Answerable = replyBot;
+        interrupted = false;
     }
 
     private void checkUserOnline(int id, Secretary secretary, Thread thread) {
         //if (!thread.isAlive()) return;
-        while (!thread.isInterrupted()) {
+        while (!interrupted) {
             try {
                 Thread.sleep(10000);
                 System.gc();
                 if (getUserById(id).isOnline()) setAnswerable(secretary.launcher);
-                else setAnswerable(Answerable);
+                else setAnswerable(Answerable.getInstance());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -108,5 +113,15 @@ public class VkBot extends User implements bot {
             e.printStackTrace();
         }
         checkUserOnline(id, secretary, thread);
+    }
+
+    @Override
+    public answerable getReply() {
+        return Answerable;
+    }
+
+    @Override
+    public void setReply(String reply) {
+        this.Answerable.setReply(reply);
     }
 }

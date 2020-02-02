@@ -15,6 +15,7 @@ public class ReplyBot implements answerable {
 
     }
 
+
     public void setReply(String reply) {
         instance = this;
         if (reply.equals("def")) this.reply = reply;
@@ -28,4 +29,5 @@ public class ReplyBot implements answerable {
     public answerable getInstance() {
         return instance;
     }
+
 }

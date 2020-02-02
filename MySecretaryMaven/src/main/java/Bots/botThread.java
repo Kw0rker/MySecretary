@@ -17,7 +17,7 @@ public class botThread extends java.lang.Thread implements Runnable {
         this.id = pair.getKey().getId();
         this.pair = pair;
         ((Runnable) () -> {
-            pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), secretary.getReplyBot().getInstance(), secretary, this);
+            pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), pair.getValue().getReply(), secretary, this);
         }).run();
     }
 
@@ -50,5 +50,9 @@ public class botThread extends java.lang.Thread implements Runnable {
 
     public int getID() {
         return this.id;
+    }
+
+    public bot getBot() {
+        return pair.getValue();
     }
 }
