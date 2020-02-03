@@ -23,6 +23,7 @@ public class botThread extends java.lang.Thread implements Runnable {
 
     public boolean close(HashSet<botThread> set) {
         this.isInterrupted = true;
+        interrupt();
         set.remove(this);
         return true;
     }

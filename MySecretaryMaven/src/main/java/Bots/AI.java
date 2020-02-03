@@ -28,11 +28,21 @@ public class AI implements answerable {
     }
 
     @Override
+    public void setReply(String message) {
+
+    }
+
+    @Override
     public void restart() {
         try {
             parser.init();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public answerable getInstance() {
+        return null;
     }
 }

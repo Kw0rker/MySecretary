@@ -1,5 +1,7 @@
 package Launchers;
 
+import interfaces.answerable;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -46,7 +48,17 @@ public class graphics extends launcher {
     }
 
     @Override
+    public void setReply(String message) {
+
+    }
+
+    @Override
     public void restart() {
 
+    }
+
+    @Override
+    public answerable getInstance() {
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package Launchers;
 
 
 import Secretary.Secretary;
+import interfaces.answerable;
 import org.apache.log4j.BasicConfigurator;
 
 import java.util.Scanner;
@@ -38,7 +39,17 @@ public class consoleLauncher extends launcher {
     }
 
     @Override
+    public void setReply(String message) {
+
+    }
+
+    @Override
     public void restart() {
 
+    }
+
+    @Override
+    public answerable getInstance() {
+        return null;
     }
 }

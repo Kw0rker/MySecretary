@@ -102,7 +102,8 @@ public class VkBot extends User implements bot {
                 Thread.sleep(10000);
                 System.gc();
                 if (getUserById(id).isOnline()) setAnswerable(secretary.launcher);
-                else setAnswerable(Answerable.getInstance());
+                else setAnswerable(replyBot.getInstance());
+                System.out.println(Answerable.getClass().getName());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -123,5 +124,6 @@ public class VkBot extends User implements bot {
     @Override
     public void setReply(String reply) {
         this.Answerable.setReply(reply);
+
     }
 }

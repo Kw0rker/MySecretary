@@ -12,6 +12,7 @@ import util.SocketThread;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class VkBotParser implements SocketListener {
     private Secretary secretary;
@@ -56,6 +57,14 @@ public class VkBotParser implements SocketListener {
                 int id = Integer.parseInt(message.split("-")[1]);
                 secretary.resumeUser(id);
             } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } else if (message.contains("changeReply")) {
+            try {
+                String[] params = message.split("-")[1].split("#");
+                secretary.changeReply(params[0], Integer.parseInt(params[1]));
+                System.out.println(Arrays.toString(params));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {

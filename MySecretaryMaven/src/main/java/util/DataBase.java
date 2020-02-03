@@ -62,15 +62,18 @@ public class DataBase {
         return users;
     }
 
-    public void changeReply(String reply, int id) {
-        try {
-            String query = "update bot_users set reply = ? where id = ?";
+    public void changeReply(String reply, int id) throws SQLException {
+        String query = "UPDATE bot_users SET reply = ? WHERE bot_users.id = ?";
             PreparedStatement preparedStmt = conn.prepareStatement(query);
             preparedStmt.setString(1, reply);
             preparedStmt.setInt(2, id);
             preparedStmt.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    }
+
+    public void deleteUser(int id) throws SQLException {
+        String query = "DELETE  bot_users WHERE bot_users.id=?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        preparedStatement.execute();
     }
 }

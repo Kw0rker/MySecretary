@@ -26,16 +26,18 @@ public class Secretary {
     private VkBotUser user;
     private HashSet<botThread> threads = new HashSet<>();
     DataBase dataBase;
+    private static Secretary instance;
 
     public Secretary(launcher launcher) {
-
+        instance = this;
         this.launcher = launcher;
         dataBase = new DataBase();
         // this.user = user;
         redirectsServices.add(new SendEmailSMTP());
         //replyBot.setReply(user.getReply());
         setup();
-        VkBotParser parser = new VkBotParser(this);
+        System.out.println("setup done");
+        new VkBotParser(this);
         //threads.add(new botThread(this,user));
         //setup();
 
@@ -59,28 +61,56 @@ public class Secretary {
 
     private void setup() {
         HashSet<VkBotUser> users = dataBase.getAllUsers();
-        for (users.user user : users) {
-            ReplyBot replyBot = new ReplyBot();
+        for (final users.user user : users) {
+            final ReplyBot replyBot = new ReplyBot();
             replyBot.setReply(user.getReply());
-            VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), this);
-            Pair<user, bot> pair = new Pair<>(user, bot);
-            threads.add(new botThread(this, pair));
+            Runnable runnable = new Runnable() {
+                public void run() {
+                    VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
+                    Pair<user, bot> pair = new Pair<>(user, bot);
+                    threads.add(new botThread(instance, pair));
+                }
+            };
+            new Thread(runnable).start();
+            System.out.println("user added");
         }
     }
 
     public void stopUser(int id) {
+        System.out.println("stop user");
         for (botThread thread : threads) {
             if (thread.getID() == id) thread.interrupt();
         }
     }
 
     public void resumeUser(int id) {
+        System.out.println("resume user");
         for (botThread thread : threads) {
             if (thread.getID() == id) thread.Resume();
         }
     }
 
+    public void deleteUser(int id) {
+        try {
+            dataBase.deleteUser(id);
+            for (botThread thread : threads) {
+                if (thread.getID() == id) thread.close(threads);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+    }
+
     public void changeReply(String reply, int id) {
+        System.out.println(reply);
+        try {
+            dataBase.changeReply(reply, id);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
         for (botThread thread : threads) {
             if (thread.getID() == id) thread.getBot().setReply(reply);
         }
