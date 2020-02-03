@@ -59,12 +59,19 @@ public class VkBotParser implements SocketListener {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-        } else if (message.contains("changeReply")) {
+        } else if (message.contains("changeReply-")) {
             try {
                 String[] params = message.split("-")[1].split("#");
                 secretary.changeReply(params[0], Integer.parseInt(params[1]));
                 System.out.println(Arrays.toString(params));
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (message.contains("delete")) {
+            try {
+                int id = Integer.parseInt(message.split("-")[1]);
+                secretary.deleteUser(id);
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         } else {

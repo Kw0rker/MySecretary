@@ -55,7 +55,7 @@ public class VkBot extends User implements bot {
     }
 
     @Override
-    public void run(String key, int id, answerable answerable, Secretary secretary, Thread thread) {
+    public void run(String key, int id, answerable answerable, Secretary secretary, botThread thread) {
         onSimpleTextMessage(message -> {
             System.out.println(message);
             int ID = message.authorId();
@@ -95,7 +95,7 @@ public class VkBot extends User implements bot {
         interrupted = false;
     }
 
-    private void checkUserOnline(int id, Secretary secretary, Thread thread) {
+    private void checkUserOnline(int id, Secretary secretary, botThread thread) {
         //if (!thread.isAlive()) return;
         while (!interrupted) {
             try {
@@ -123,7 +123,8 @@ public class VkBot extends User implements bot {
 
     @Override
     public void setReply(String reply) {
-        this.Answerable.setReply(reply);
+        this.replyBot.setReply(reply);
+        System.out.println("called function set Reply ");
 
     }
 }

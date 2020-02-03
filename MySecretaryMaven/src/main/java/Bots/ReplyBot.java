@@ -24,6 +24,7 @@ public class ReplyBot implements answerable {
             instance = new AI();
             System.out.println("ai build finished");
         } else this.reply = reply;
+        System.out.println(reply);
     }
 
     public answerable getInstance() {

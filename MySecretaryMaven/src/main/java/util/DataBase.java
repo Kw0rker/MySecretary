@@ -71,7 +71,7 @@ public class DataBase {
     }
 
     public void deleteUser(int id) throws SQLException {
-        String query = "DELETE  bot_users WHERE bot_users.id=?";
+        String query = "DELETE  from bot_users WHERE bot_users.id=?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setInt(1, id);
         preparedStatement.execute();

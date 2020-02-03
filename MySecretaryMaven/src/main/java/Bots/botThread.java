@@ -7,28 +7,32 @@ import users.user;
 
 import java.util.HashSet;
 
-public class botThread extends java.lang.Thread implements Runnable {
+public class botThread implements Runnable {
     private int id;
     //VkBot bot;
     private boolean isInterrupted = false;
     private Pair<user, ? extends bot> pair;
+    private Secretary secretary;
 
     public botThread(Secretary secretary, Pair<user, ? extends bot> pair) {
         this.id = pair.getKey().getId();
+        this.secretary = secretary;
+        System.out.println("thread created with id:" + this.id);
         this.pair = pair;
-        ((Runnable) () -> {
-            pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), pair.getValue().getReply(), secretary, this);
-        }).run();
+        new Thread(this).start();
     }
 
     public boolean close(HashSet<botThread> set) {
         this.isInterrupted = true;
+        if (pair.getValue() instanceof VkBot) {
+            VkBot bot = (VkBot) pair.getValue();
+            bot.longPoll().off();
+        }
         interrupt();
         set.remove(this);
         return true;
     }
 
-    @Override
     public boolean isInterrupted() {
         return isInterrupted;
     }
@@ -38,7 +42,6 @@ public class botThread extends java.lang.Thread implements Runnable {
         return id;
     }
 
-    @Override
     public void interrupt() {
         isInterrupted = true;
         pair.getValue().stop();
@@ -55,5 +58,13 @@ public class botThread extends java.lang.Thread implements Runnable {
 
     public bot getBot() {
         return pair.getValue();
+    }
+
+    @Override
+    public void run() {
+        System.out.println("runned");
+        pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), pair.getValue().getReply(), secretary, this);
+
+
     }
 }

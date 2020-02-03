@@ -24,20 +24,21 @@ public class Secretary {
     private VkBot bot;
     private LinkedList<Redirect> redirectsServices = new LinkedList<>();
     private VkBotUser user;
-    private HashSet<botThread> threads = new HashSet<>();
+    private final HashSet<botThread> threads = new HashSet<>();
     DataBase dataBase;
     private static Secretary instance;
 
     public Secretary(launcher launcher) {
         instance = this;
         this.launcher = launcher;
+        new VkBotParser(this);
         dataBase = new DataBase();
         // this.user = user;
         redirectsServices.add(new SendEmailSMTP());
         //replyBot.setReply(user.getReply());
         setup();
         System.out.println("setup done");
-        new VkBotParser(this);
+
         //threads.add(new botThread(this,user));
         //setup();
 
@@ -61,14 +62,16 @@ public class Secretary {
 
     private void setup() {
         HashSet<VkBotUser> users = dataBase.getAllUsers();
-        for (final users.user user : users) {
-            final ReplyBot replyBot = new ReplyBot();
+        for (users.user user : users) {
+            ReplyBot replyBot = new ReplyBot();
             replyBot.setReply(user.getReply());
             Runnable runnable = new Runnable() {
                 public void run() {
                     VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
                     Pair<user, bot> pair = new Pair<>(user, bot);
-                    threads.add(new botThread(instance, pair));
+                    botThread thread = new botThread(instance, pair);
+                    System.out.println("created thread with id\n" + thread.getID());
+                    threads.add(thread);
                 }
             };
             new Thread(runnable).start();
@@ -77,9 +80,12 @@ public class Secretary {
     }
 
     public void stopUser(int id) {
-        System.out.println("stop user");
+        System.out.println("stop user with id:" + id);
         for (botThread thread : threads) {
-            if (thread.getID() == id) thread.interrupt();
+            if (thread.getID() == id) {
+                thread.interrupt();
+                System.out.println("thread stopped with id:" + id);
+            }
         }
     }
 
@@ -94,7 +100,10 @@ public class Secretary {
         try {
             dataBase.deleteUser(id);
             for (botThread thread : threads) {
-                if (thread.getID() == id) thread.close(threads);
+                if (thread.getID() == id) {
+                    thread.close(threads);
+                    System.out.println(thread.getID() + ":found");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -103,7 +112,7 @@ public class Secretary {
     }
 
     public void changeReply(String reply, int id) {
-        System.out.println(reply);
+        System.out.println(threads.size());
         try {
             dataBase.changeReply(reply, id);
 
@@ -112,7 +121,11 @@ public class Secretary {
             return;
         }
         for (botThread thread : threads) {
-            if (thread.getID() == id) thread.getBot().setReply(reply);
+            if (thread.getID() == id) {
+                System.out.println("found");
+                thread.getBot().setReply(reply);
+
+            }
         }
 
     }
