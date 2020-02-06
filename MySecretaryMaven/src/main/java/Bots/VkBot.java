@@ -50,7 +50,7 @@ public class VkBot extends User implements bot {
         }
     }
 
-    public void setAnswerable(answerable answerable) {
+    private void setAnswerable(answerable answerable) {
         Answerable = answerable;
     }
 
@@ -60,7 +60,6 @@ public class VkBot extends User implements bot {
             System.out.println(message);
             int ID = message.authorId();
             String reply = Answerable.respond(message.getText());
-            System.out.println("Reply: " + reply);
             while (reply == null || reply.equals("")) {
                 Answerable.restart();
                 reply = Answerable.respond(message.getText());
@@ -75,11 +74,11 @@ public class VkBot extends User implements bot {
                     .send();
 
         });
-        onPhotoMessage(message -> new Message()
+        /*onPhotoMessage(message -> new Message()
                 .from(this)
                 .to(message.authorId())
                 .text("К сожалению функция распознавания фото еще не введена\n Но вы можете помочь мне тут-\nhttps://github.com/Kw0rker/MySecretary")
-                .send());
+                .send());*/
         checkUserOnline(id, secretary, thread);
     }
 
@@ -99,6 +98,7 @@ public class VkBot extends User implements bot {
         //if (!thread.isAlive()) return;
         while (!interrupted) {
             try {
+                System.out.println(replyBot == null);
                 Thread.sleep(10000);
                 System.gc();
                 if (getUserById(id).isOnline()) setAnswerable(secretary.launcher);
@@ -124,7 +124,6 @@ public class VkBot extends User implements bot {
     @Override
     public void setReply(String reply) {
         this.replyBot.setReply(reply);
-        System.out.println("called function set Reply ");
 
     }
 }

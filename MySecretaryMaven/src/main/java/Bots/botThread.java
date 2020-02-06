@@ -62,8 +62,7 @@ public class botThread implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("runned");
-        pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), pair.getValue().getReply(), secretary, this);
+        pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), pair.getValue().getReply().getInstance(), secretary, this);
 
 
     }

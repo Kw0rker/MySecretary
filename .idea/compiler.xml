@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="MySecretaryMaven" target="8" />
+      <module name="MySecretaryMaven" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

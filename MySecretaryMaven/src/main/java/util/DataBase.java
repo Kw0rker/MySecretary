@@ -13,7 +13,7 @@ public class DataBase {
     public DataBase() {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/vkbotusers?" +
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/mysecretary?" +
                     "user=root&password=Halflife3?");
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println("Exception occurred on connecting to database\n" + e.getMessage());

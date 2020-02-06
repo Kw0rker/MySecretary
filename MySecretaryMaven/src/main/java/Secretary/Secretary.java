@@ -63,34 +63,29 @@ public class Secretary {
     private void setup() {
         HashSet<VkBotUser> users = dataBase.getAllUsers();
         for (users.user user : users) {
-            ReplyBot replyBot = new ReplyBot();
+            final ReplyBot replyBot = new ReplyBot();
             replyBot.setReply(user.getReply());
             Runnable runnable = new Runnable() {
                 public void run() {
                     VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
                     Pair<user, bot> pair = new Pair<>(user, bot);
                     botThread thread = new botThread(instance, pair);
-                    System.out.println("created thread with id\n" + thread.getID());
                     threads.add(thread);
                 }
             };
             new Thread(runnable).start();
-            System.out.println("user added");
         }
     }
 
     public void stopUser(int id) {
-        System.out.println("stop user with id:" + id);
         for (botThread thread : threads) {
             if (thread.getID() == id) {
                 thread.interrupt();
-                System.out.println("thread stopped with id:" + id);
             }
         }
     }
 
     public void resumeUser(int id) {
-        System.out.println("resume user");
         for (botThread thread : threads) {
             if (thread.getID() == id) thread.Resume();
         }
@@ -102,7 +97,6 @@ public class Secretary {
             for (botThread thread : threads) {
                 if (thread.getID() == id) {
                     thread.close(threads);
-                    System.out.println(thread.getID() + ":found");
                 }
             }
         } catch (SQLException e) {
@@ -122,7 +116,6 @@ public class Secretary {
         }
         for (botThread thread : threads) {
             if (thread.getID() == id) {
-                System.out.println("found");
                 thread.getBot().setReply(reply);
 
             }

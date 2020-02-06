@@ -43,6 +43,6 @@ public class AI implements answerable {
 
     @Override
     public answerable getInstance() {
-        return null;
+        return this;
     }
 }

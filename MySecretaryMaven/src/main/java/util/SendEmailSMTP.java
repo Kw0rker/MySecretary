@@ -59,7 +59,6 @@ public class SendEmailSMTP implements Redirect {
             // send
             t.sendMessage(msg, msg.getAllRecipients());
 
-            System.out.println("Response: " + t.getLastServerResponse());
 
             t.close();
             return true;
