@@ -22,9 +22,25 @@ public class VkBot extends User implements bot {
         replyBot = answerable;
         this.id = id;
         this.secretary = secretary;
-
         Answerable=answerable;
-        System.out.println(Answerable.getClass().toString());
+        onSimpleTextMessage(message -> {
+            String reply = Answerable.respond(message.getText());
+            while (reply == null || reply.equals("")) {
+                Answerable.restart();
+                reply = Answerable.respond(message.getText());
+            }
+            System.out.println(message);
+            VkUser user = getUserById(message.authorId());
+            if (!getUserById(id).isOnline()) {
+                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
+                new Message()
+                        .from(this)
+                        .to(message.authorId())
+                        .text(reply)
+                        .send();
+            }
+
+        });
     }
 
     public static VkUser getUserById(int id) {
@@ -54,28 +70,6 @@ public class VkBot extends User implements bot {
 
     @Override
     public void run(String key, int id, answerable answerable, Secretary secretary, botThread thread, bot bot) {
-        onSimpleTextMessage(message -> {
-            String reply = Answerable.respond(message.getText());
-            while (reply == null || reply.equals("")) {
-                Answerable.restart();
-                reply = Answerable.respond(message.getText());
-            }
-            VkUser user = getUserById(id);
-            if (!getUserById(id).isOnline()) {
-                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
-                new Message()
-                        .from((VkBot) bot)
-                        .to(message.authorId())
-                        .text(reply)
-                        .send();
-            }
-
-        });
-        /*onPhotoMessage(message -> new Message()
-                .from(this)
-                .to(message.authorId())
-                .text("К сожалению функция распознавания фото еще не введена\n Но вы можете помочь мне тут-\nhttps://github.com/Kw0rker/MySecretary")
-                .send());*/
         checkUserOnline(id, secretary, thread);
     }
 
