@@ -26,6 +26,7 @@ public class Secretary {
     private VkBotUser user;
     private final HashSet<botThread> threads = new HashSet<>();
     DataBase dataBase;
+    Pair<user, bot> currentPair;
     private static Secretary instance;
 
     public Secretary(launcher launcher) {
@@ -63,19 +64,23 @@ public class Secretary {
     private void setup() {
         HashSet<VkBotUser> users = dataBase.getAllUsers();
         for (users.user user : users) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    ReplyBot replyBot = new ReplyBot();
-                    replyBot.setReply(user.getReply());
-                    VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
-                    Pair<user, bot> pair = new Pair<>(user, bot);
-                    bot.enableTyping(false);
-                    botThread thread = new botThread(instance, pair);
-                    threads.add(thread);
-                }
-            }).start();
+            ReplyBot replyBot = new ReplyBot();
+            replyBot.setReply(user.getReply());
+            Pair<user, bot> pair;
+            Thread thread1 = new Thread(() -> {
+                VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
+                bot.enableTyping(false);
+                currentPair = new Pair<>(user, bot);
 
+            });
+            thread1.start();
+            try {
+                thread1.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            botThread thread = new botThread(instance, currentPair);
+            threads.add(thread);
         }
     }
 

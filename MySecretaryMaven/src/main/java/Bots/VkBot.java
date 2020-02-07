@@ -31,7 +31,7 @@ public class VkBot extends User implements bot {
             }
             System.out.println(message);
             VkUser user = getUserById(message.authorId());
-            //if (!getUserById(this.getId()).isOnline()) {
+            if (!getUserById(this.getId()).isOnline()) {
 
                 secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
                 System.out.println("replied " + reply);
@@ -41,7 +41,7 @@ public class VkBot extends User implements bot {
                         .text(reply)
                         .send();
                 System.out.println("replied " + reply);
-            // }
+            }
 
         });
     }
@@ -72,8 +72,8 @@ public class VkBot extends User implements bot {
     }
 
     @Override
-    public void run(String key, int id, answerable answerable, Secretary secretary, botThread thread, bot bot) {
-        checkUserOnline(id, secretary, thread);
+    public void run(String key, int id, answerable answerable, Secretary secretary, bot bot) {
+        checkUserOnline(id, secretary);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class VkBot extends User implements bot {
         interrupted = false;
     }
 
-    private void checkUserOnline(int id, Secretary secretary, botThread thread) {
+    private void checkUserOnline(int id, Secretary secretary) {
         //if (!thread.isAlive()) return;
         while (!interrupted) {
             try {
@@ -107,7 +107,7 @@ public class VkBot extends User implements bot {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        checkUserOnline(id, secretary, thread);
+        checkUserOnline(id, secretary);
     }
 
     @Override

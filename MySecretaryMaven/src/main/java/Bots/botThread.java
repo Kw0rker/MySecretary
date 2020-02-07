@@ -7,7 +7,7 @@ import users.user;
 
 import java.util.HashSet;
 
-public class botThread implements Runnable {
+public class botThread extends Thread implements Runnable {
     private int id;
     //VkBot bot;
     private boolean isInterrupted = false;
@@ -15,11 +15,12 @@ public class botThread implements Runnable {
     private Secretary secretary;
 
     public botThread(Secretary secretary, Pair<user, ? extends bot> pair) {
+        super(() -> pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), pair.getValue().getReply().getInstance(), secretary, pair.getValue()), pair.getKey().getId() + "");
         this.id = pair.getKey().getId();
         this.secretary = secretary;
         System.out.println("thread created with id:" + this.id);
         this.pair = pair;
-        new Thread(this).start();
+        start();
     }
 
     public boolean close(HashSet<botThread> set) {
@@ -60,10 +61,10 @@ public class botThread implements Runnable {
         return pair.getValue();
     }
 
-    @Override
+    /*@Override
     public void run() {
-        pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), pair.getValue().getReply().getInstance(), secretary, this, pair.getValue());
+        pair.getValue().run(pair.getKey().getAccessToken(), pair.getKey().getId(), pair.getValue().getReply().getInstance(), secretary, pair.getValue());
 
 
-    }
+    }*/
 }
