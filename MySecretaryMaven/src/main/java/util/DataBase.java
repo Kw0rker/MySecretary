@@ -31,7 +31,7 @@ public class DataBase {
             String accessToken = user.getAccessToken();
             int id = user.getId();
             String reply = user.getReply();
-        String request = "insert into bot_users  (email, accessToken, id, reply)" + " values (?,?,?,?)";
+        String request = "INSERT INTO bot_users  (email, accessToken, id, reply)" + " values (?,?,?,?)";
         PreparedStatement preparedStatement = conn.prepareStatement(request);
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, accessToken);

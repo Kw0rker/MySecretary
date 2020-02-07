@@ -65,15 +65,13 @@ public class Secretary {
         for (users.user user : users) {
             final ReplyBot replyBot = new ReplyBot();
             replyBot.setReply(user.getReply());
-            Runnable runnable = new Runnable() {
-                public void run() {
-                    VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
-                    Pair<user, bot> pair = new Pair<>(user, bot);
-                    botThread thread = new botThread(instance, pair);
-                    threads.add(thread);
-                }
-            };
-            new Thread(runnable).start();
+            VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
+            Pair<user, bot> pair = new Pair<>(user, bot);
+            bot.enableTyping(false);
+            botThread thread = new botThread(instance, pair);
+            threads.add(thread);
+
+
         }
     }
 
@@ -127,6 +125,7 @@ public class Secretary {
         try {
             dataBase.insert((VkBotUser) pair.getKey());
         } catch (SQLException e) {
+            e.printStackTrace();
             return;//If any sql exception occurs dont create a new thread also if user is already in db
         }
         this.threads.add(new botThread(this, pair));

@@ -30,8 +30,6 @@ public class VkBot extends User implements bot {
     public static VkUser getUserById(int id) {
         String request = "https://api.vk.com/method/users.get?access_token=1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63&user_id=" + id + "&fields=online&v=5.00";
         String respond = Connection.getRequestResponse(request);
-        System.out.println(id);
-        System.out.println(respond);
         System.gc();
         try {
             String name = respond.split("\"first_name\":\"")[1].split("\",")[0];
@@ -55,23 +53,22 @@ public class VkBot extends User implements bot {
     }
 
     @Override
-    public void run(String key, int id, answerable answerable, Secretary secretary, botThread thread) {
+    public void run(String key, int id, answerable answerable, Secretary secretary, botThread thread, bot bot) {
         onSimpleTextMessage(message -> {
-            System.out.println(message);
-            int ID = message.authorId();
             String reply = Answerable.respond(message.getText());
             while (reply == null || reply.equals("")) {
                 Answerable.restart();
                 reply = Answerable.respond(message.getText());
             }
-            VkUser user = getUserById(ID);
-            if (!user.isOnline())
+            VkUser user = getUserById(id);
+            if (!getUserById(id).isOnline()) {
                 secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
-            new Message()
-                    .from(this)
-                    .to(message.authorId())
-                    .text(reply)
-                    .send();
+                new Message()
+                        .from((VkBot) bot)
+                        .to(message.authorId())
+                        .text(reply)
+                        .send();
+            }
 
         });
         /*onPhotoMessage(message -> new Message()

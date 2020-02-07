@@ -81,6 +81,8 @@ public class VkBotParser implements SocketListener {
             ReplyBot replyBot = new ReplyBot();
             replyBot.setReply(user.getReply());
             VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), secretary);
+            bot.enableTyping(false);
+
             secretary.addNewUser(new Pair<>(user, bot));
         }
         return null;

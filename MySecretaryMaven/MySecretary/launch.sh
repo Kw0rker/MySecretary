@@ -1,2 +1,2 @@
-java -Dfile.encoding=UTF-8 -jar MySecretaryBack.jar &
-java -Dfile.encoding=UTF-8 -jar MySecretaryFront.jar
+nohup java -Dfile.encoding=UTF-8 -jar MySecretaryBack.jar &
+nohup java -Dfile.encoding=UTF-8 -jar MySecretaryFront.jar &
