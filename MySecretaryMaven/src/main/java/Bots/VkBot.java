@@ -31,13 +31,14 @@ public class VkBot extends User implements bot {
             }
             System.out.println(message);
             VkUser user = getUserById(message.authorId());
-            if (!getUserById(id).isOnline()) {
+            if (!getUserById(this.getId()).isOnline()) {
                 secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
                 new Message()
                         .from(this)
                         .to(message.authorId())
                         .text(reply)
                         .send();
+                System.out.println("replied " + reply);
             }
 
         });
@@ -89,7 +90,7 @@ public class VkBot extends User implements bot {
         //if (!thread.isAlive()) return;
         while (!interrupted) {
             try {
-                System.out.println(replyBot == null);
+
                 Thread.sleep(10000);
                 System.gc();
                 if (getUserById(id).isOnline()) setAnswerable(secretary.launcher);
