@@ -80,10 +80,12 @@ public class VkBotParser implements SocketListener {
             VkBotUser user = gson.fromJson(message, VkBotUser.class);
             ReplyBot replyBot = new ReplyBot();
             replyBot.setReply(user.getReply());
-            VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), secretary);
-            bot.enableTyping(false);
+            new Thread(() -> {
+                VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), secretary);
+                bot.enableTyping(false);
+                secretary.addNewUser(new Pair<>(user, bot));
+            }).start();
 
-            secretary.addNewUser(new Pair<>(user, bot));
         }
         return null;
     }

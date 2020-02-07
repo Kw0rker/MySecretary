@@ -63,14 +63,18 @@ public class Secretary {
     private void setup() {
         HashSet<VkBotUser> users = dataBase.getAllUsers();
         for (users.user user : users) {
-            final ReplyBot replyBot = new ReplyBot();
-            replyBot.setReply(user.getReply());
-            VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
-            Pair<user, bot> pair = new Pair<>(user, bot);
-            bot.enableTyping(false);
-            botThread thread = new botThread(instance, pair);
-            threads.add(thread);
-
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ReplyBot replyBot = new ReplyBot();
+                    replyBot.setReply(user.getReply());
+                    VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
+                    Pair<user, bot> pair = new Pair<>(user, bot);
+                    bot.enableTyping(false);
+                    botThread thread = new botThread(instance, pair);
+                    threads.add(thread);
+                }
+            }).start();
 
         }
     }
