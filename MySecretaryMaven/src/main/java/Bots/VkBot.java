@@ -32,7 +32,9 @@ public class VkBot extends User implements bot {
             System.out.println(message);
             VkUser user = getUserById(message.authorId());
             if (!getUserById(this.getId()).isOnline()) {
+
                 secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
+                System.out.println("replied " + reply);
                 new Message()
                         .from(this)
                         .to(message.authorId())

@@ -58,7 +58,7 @@ public class SendEmailSMTP implements Redirect {
 
             // send
             t.sendMessage(msg, msg.getAllRecipients());
-
+            System.out.println(msg + " :send to email:" + EMAIL_TO);
 
             t.close();
             return true;
