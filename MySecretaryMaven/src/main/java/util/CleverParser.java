@@ -51,12 +51,11 @@ public class CleverParser {
         while (textField.getText().equals("thinking")
                 || textField.getText().equals("thinking.")
                 || textField.getText().equals("thinking..")
-                || textField.getText().equals("thinking...")) ; //Wait while the bot thinking
-        System.out.println("Answer: " + textField.getText());
+                || textField.getText().equals("thinking...")
+                || textField.getText().equals("thinking....")) ; //Wait while the bot thinking
 
         Object result = this.page.get().executeJavaScript("cleverbot.alternates")
                 .getJavaScriptResult(); //Get answers
-
         if (result instanceof NativeArray) {
             return ((NativeArray) result).get(0).toString();
         }

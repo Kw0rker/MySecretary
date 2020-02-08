@@ -12,7 +12,6 @@ public class ReplyBot implements answerable {
 
     @Override
     public void restart() {
-
     }
 
 

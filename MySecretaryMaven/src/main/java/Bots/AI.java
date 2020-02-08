@@ -4,6 +4,7 @@ import interfaces.answerable;
 import util.CleverParser;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class AI implements answerable {
     CleverParser parser;
@@ -23,8 +24,8 @@ public class AI implements answerable {
             return parser.sendAI(message);
         } catch (IOException e) {
             e.printStackTrace();
+            return "Ошибочка вышла" + Arrays.toString(e.getStackTrace());
         }
-        return "";
     }
 
     @Override

@@ -13,37 +13,48 @@ public class VkBot extends User implements bot {
     private answerable Answerable;
     private answerable replyBot;
     boolean interrupted = false;
+    String key;
     //private static String key = "1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63";
-    private int id;
+    private int vk_id;
+    private String email;
+    //private int author_id;
 
-    public VkBot(String key, int id, answerable answerable, Secretary secretary) {
-        super(key);
-        //VkBot.key = key;
-        replyBot = answerable;
-        this.id = id;
+    public VkBot(String key, int vk_id, answerable answerable, Secretary secretary, String email) {
+        super(vk_id, key);
+        this.email = email;
+        enableLoggingUpdates(false);
+        enableTyping(true);
+        this.key = key;
+        this.vk_id = vk_id;
         this.secretary = secretary;
         Answerable=answerable;
+        replyBot = answerable;
+
         onSimpleTextMessage(message -> {
+
+            int id = message.authorId();
+            this.setId(vk_id);
             String reply = Answerable.respond(message.getText());
             while (reply == null || reply.equals("")) {
                 Answerable.restart();
                 reply = Answerable.respond(message.getText());
             }
-            System.out.println(message);
-            VkUser user = getUserById(message.authorId());
-            if (!getUserById(this.getId()).isOnline()) {
-
-                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
-                System.out.println("replied " + reply);
+            if (!getUserById(vk_id).isOnline()) {
                 new Message()
                         .from(this)
-                        .to(message.authorId())
+                        .to(id)
                         .text(reply)
                         .send();
-                System.out.println("replied " + reply);
+                VkUser user = getUserById(id);
+                //if (!getUserById(vk_id).isOnline()){
+                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name(), email);
             }
 
+            //}
         });
+        enableTyping(true);
+        Answerable = answerable;
+        System.out.println("vkBot build with id:" + vk_id);
     }
 
     public static VkUser getUserById(int id) {
@@ -97,7 +108,6 @@ public class VkBot extends User implements bot {
                 System.gc();
                 if (getUserById(id).isOnline()) setAnswerable(secretary.launcher);
                 else setAnswerable(replyBot.getInstance());
-                System.out.println(Answerable.getClass().getName());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -115,9 +125,39 @@ public class VkBot extends User implements bot {
         return Answerable;
     }
 
+    synchronized static void send(Message incomeMessage, User user, String reply, String key) {
+        Message message1 = new Message();
+        message1.from(user);
+        message1.setAccessToken(key);
+        message1.to(incomeMessage.authorId());
+        message1.text(reply)
+                .send();
+    }
+
     @Override
     public void setReply(String reply) {
         this.replyBot.setReply(reply);
 
+    }
+
+    public void setup() {
+        /*onSimpleTextMessage(message -> {
+            author_id=message.authorId();
+            System.out.println("received message:  "+message.getText()+"     :from:"+author_id);
+            String reply = Answerable.respond(message.getText());
+            while (reply == null || reply.equals("")) {
+                Answerable.restart();
+                reply = Answerable.respond(message.getText());
+            }
+            System.out.println(reply+": to  "+message.authorId());
+            VkUser user = getUserById(message.authorId());
+            if (!getUserById(this.id).isOnline()) {
+
+               // secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name());
+                System.out.println("replied " + reply);
+                VkBot.send(message,this,reply);
+            }
+
+        });*/
     }
 }

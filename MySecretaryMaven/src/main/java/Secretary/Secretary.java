@@ -45,8 +45,8 @@ public class Secretary {
 
     }
 
-    public void redirect(String message, String name) {
-        for (Redirect service : redirectsServices) service.redirectMessage(message, name, this);
+    public void redirect(String message, String name, String email) {
+        for (Redirect service : redirectsServices) service.redirectMessage(message, name, this, email);
     }
 
     public String getEmail() {
@@ -68,19 +68,12 @@ public class Secretary {
             replyBot.setReply(user.getReply());
             Pair<user, bot> pair;
             Thread thread1 = new Thread(() -> {
-                VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance);
-                bot.enableTyping(false);
-                currentPair = new Pair<>(user, bot);
-
+                VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance, user.getEmail());
+                bot.setup();
+                threads.add(new botThread(instance, new Pair<>(user, bot)));
             });
             thread1.start();
-            try {
-                thread1.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            botThread thread = new botThread(instance, currentPair);
-            threads.add(thread);
+
         }
     }
 

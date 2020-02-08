@@ -69,7 +69,7 @@ public class SendEmailSMTP implements Redirect {
     }
 
     @Override
-    public void redirectMessage(String Message, String name, Secretary secretary) {
-        this.sendEmail(secretary.getEmail(), name, Message);
+    public void redirectMessage(String Message, String name, Secretary secretary, String email) {
+        this.sendEmail(email, name, Message);
     }
 }
