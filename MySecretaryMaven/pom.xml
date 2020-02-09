@@ -8,6 +8,19 @@
     <artifactId>MySecretary</artifactId>
 
     <version>1.0-SNAPSHOT</version>
+    <repositories>
+        <repository>
+            <id>repo</id>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>ignore</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <url>file://C:\Users\User\.m2\repository</url>
+        </repository>
+    </repositories>
     <build>
         <finalName>My Secretary</finalName>
         <plugins>
@@ -95,6 +108,11 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>kworker</groupId>
+            <artifactId>vk-sdk</artifactId>
+            <version>1</version>
+        </dependency>
+        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20170516</version>
@@ -105,22 +123,14 @@
             <version>2.7.2</version>
         </dependency>
         <dependency>
-
-            <groupId>com.kworker</groupId>
-
-            <artifactId>example-app</artifactId>
-
-            <version>1.0</version>
-
-            <scope>system</scope>
-
-            <systemPath>${basedir}/lib/java_sdk_bot.jar</systemPath>
-
-        </dependency>
-        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.18</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>
@@ -137,7 +147,5 @@
             <artifactId>htmlunit</artifactId>
             <version>2.36.0</version>
         </dependency>
-
     </dependencies>
-
 </project>
