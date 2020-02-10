@@ -15,9 +15,15 @@ setup done
 
 vkBot build with id:353087280
 thread created with id:353087280
-47400 [threadLongpollListener] INFO co134294 [threadLongpollListener] INFO com.petersamokhin.bots.sdk.longpoll.LongPoll  - Response of getting updates: 
-{"updates":[],"pts":10001499,"ts":1621370662}
-
-159789 [threadLongpollListener] INFO com.petersamokhin.bots.sdk.longpoll.LongPoll  - Response of getting updates: 
-{"updates":[],"pts":10001499,"ts":1621370662}
-
+47400 [threadLongpollListener] INFO co134294 [threadLongpollListener] INFO com.petersamokhin.bots.sdk.longpoll.LongPoll  - Response of gettijava.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(Unknown Source)
+	at java.net.SocketInputStream.read(Unknown Source)
+	at sun.nio.cs.StreamDecoder.readBytes(Unknown Source)
+	at sun.nio.cs.StreamDecoder.implRead(Unknown Source)
+	at sun.nio.cs.StreamDecoder.read(Unknown Source)
+	at java.io.InputStreamReader.read(Unknown Source)
+	at java.io.BufferedReader.fill(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at util.SocketThread.run(SocketThread.java:42)
+	at java.lang.Thread.run(Unknown Source)

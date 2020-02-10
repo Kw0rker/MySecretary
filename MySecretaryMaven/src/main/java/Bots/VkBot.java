@@ -31,23 +31,24 @@ public class VkBot extends User implements bot {
         replyBot = answerable;
 
         onSimpleTextMessage(message -> {
-
-            int id = message.authorId();
-            this.setId(vk_id);
-            String reply = Answerable.respond(message.getText());
-            while (reply == null || reply.equals("")) {
-                Answerable.restart();
-                reply = Answerable.respond(message.getText());
-            }
-            if (!getUserById(vk_id).isOnline()) {
-                new Message()
-                        .from(this)
-                        .to(id)
-                        .text(reply)
-                        .send();
-                VkUser user = getUserById(id);
-                //if (!getUserById(vk_id).isOnline()){
-                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name(), email);
+            if (!message.isMessageFromChat()) {
+                int id = message.authorId();
+                this.setId(vk_id);
+                String reply = Answerable.respond(message.getText());
+                while (reply == null || reply.equals("")) {
+                    Answerable.restart();
+                    reply = Answerable.respond(message.getText());
+                }
+                if (!getUserById(vk_id).isOnline()) {
+                    new Message()
+                            .from(this)
+                            .to(id)
+                            .text(reply)
+                            .send();
+                    VkUser user = getUserById(id);
+                    //if (!getUserById(vk_id).isOnline()){
+                    secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name(), email);
+                }
             }
 
             //}
