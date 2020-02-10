@@ -30,9 +30,8 @@ public class VkBot extends User implements bot {
         Answerable=answerable;
         replyBot = answerable;
 
-        onMessage(message -> {
-            if (message.getText().equals("")) return;
-            if (!message.isMessageFromChat()) {
+        onSimpleTextMessage(message -> {
+            if (message.chatId() != null) {
                 int id = message.authorId();
                 this.setId(vk_id);
                 String reply = Answerable.respond(message.getText());
@@ -51,7 +50,6 @@ public class VkBot extends User implements bot {
                     secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name(), email);
                 }
             }
-
             //}
         });
         enableTyping(true);
