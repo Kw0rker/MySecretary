@@ -31,7 +31,7 @@ public class VkBot extends User implements bot {
         replyBot = answerable;
 
         onSimpleTextMessage(message -> {
-
+            if (message.isMessageFromChat()) return;
             int id = message.authorId();
             this.setId(vk_id);
             String reply = Answerable.respond(message.getText());
