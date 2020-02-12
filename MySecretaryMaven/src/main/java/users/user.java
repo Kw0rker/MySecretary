@@ -6,12 +6,14 @@ public class user {
     private String accessToken;
     private int id;
     private String reply;
+    private boolean onPause;
 
-    public user(String email, String accessToken, int id, String reply) {
+    public user(String email, String accessToken, int id, String reply, boolean onPause) {
         this.email = email;
         this.accessToken = accessToken;
         this.id = id;
         this.reply = reply;
+        this.onPause = onPause;
     }
 
     public String getEmail() {
@@ -28,5 +30,13 @@ public class user {
 
     public String getReply() {
         return reply;
+    }
+
+    public boolean isOnPause() {
+        return onPause;
+    }
+
+    public void setOnPause(boolean onPause) {
+        this.onPause = onPause;
     }
 }

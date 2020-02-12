@@ -7,6 +7,7 @@ import com.petersamokhin.bots.sdk.objects.Message;
 import com.petersamokhin.bots.sdk.utils.web.Connection;
 import interfaces.answerable;
 import interfaces.bot;
+import users.user;
 
 public class VkBot extends User implements bot {
     private Secretary secretary;
@@ -17,17 +18,22 @@ public class VkBot extends User implements bot {
     //private static String key = "1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63";
     private int vk_id;
     private String email;
+    private user user;
     //private int author_id;
 
-    public VkBot(String key, int vk_id, answerable answerable, Secretary secretary, String email) {
-        super(vk_id, key);
+    public VkBot(Secretary secretary, user user, answerable answerable) {
+        super(user.getId(), user.getAccessToken());
         this.email = email;
+        this.user = user;
         enableLoggingUpdates(false);
         enableTyping(true);
         this.key = key;
         this.vk_id = vk_id;
         this.secretary = secretary;
-        Answerable=answerable;
+        if (user.isOnPause()) {
+            Answerable = secretary.launcher;
+            System.out.println("user on pause");
+        } else Answerable = answerable;
         replyBot = answerable;
 
         onSimpleTextMessage(message -> {
@@ -45,9 +51,9 @@ public class VkBot extends User implements bot {
                         .to(id)
                         .text(reply)
                         .send();
-                VkUser user = getUserById(id);
+                VkUser userById = getUserById(id);
                 //if (!getUserById(vk_id).isOnline()){
-                secretary.redirect(message.getText(), user.getFirst_name() + " " + user.getLast_name(), email);
+                secretary.redirect(message.getText(), userById.getFirst_name() + " " + userById.getLast_name(), email);
             }
 
             //}
@@ -89,19 +95,22 @@ public class VkBot extends User implements bot {
 
     @Override
     public void stop() {
+        user.setOnPause(true);
         Answerable = secretary.launcher;
         interrupted = true;
     }
 
     @Override
     public void resume() {
+        user.setOnPause(false);
+
         Answerable = replyBot;
         interrupted = false;
     }
 
     private void checkUserOnline(int id, Secretary secretary) {
         //if (!thread.isAlive()) return;
-        while (!interrupted) {
+        while (!user.isOnPause()) {
             try {
 
                 Thread.sleep(10000);

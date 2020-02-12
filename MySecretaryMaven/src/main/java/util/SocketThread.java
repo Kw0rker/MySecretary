@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.Charset;
 
 public class SocketThread implements Runnable {
     private boolean isInterrupted = false;
@@ -35,7 +36,7 @@ public class SocketThread implements Runnable {
             listener.socketCreated(serverSocket);
             socket = serverSocket.accept();
             listener.socketAccepted(socket);
-            stream = new InputStreamReader(socket.getInputStream());
+            stream = new InputStreamReader(socket.getInputStream(), Charset.forName("CP1251"));
             listener.inputStreamCreated(stream);
             reader = new BufferedReader(stream);
             while (!isInterrupted) {

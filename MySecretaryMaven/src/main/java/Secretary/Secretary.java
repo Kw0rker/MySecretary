@@ -68,7 +68,7 @@ public class Secretary {
             replyBot.setReply(user.getReply());
             Pair<user, bot> pair;
             Thread thread1 = new Thread(() -> {
-                VkBot bot = new VkBot(user.getAccessToken(), user.getId(), replyBot.getInstance(), instance, user.getEmail());
+                VkBot bot = new VkBot(instance, user, replyBot);
                 bot.setup();
                 threads.add(new botThread(instance, new Pair<>(user, bot)));
             });
@@ -78,16 +78,32 @@ public class Secretary {
     }
 
     public void stopUser(int id) {
+        try {
+            dataBase.pauseUser(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
         for (botThread thread : threads) {
             if (thread.getID() == id) {
-                thread.interrupt();
+
+                thread.getBot().stop();
             }
         }
     }
 
     public void resumeUser(int id) {
+        try {
+            dataBase.resumeUser(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
         for (botThread thread : threads) {
-            if (thread.getID() == id) thread.Resume();
+            if (thread.getID() == id) {
+                thread.Resume();
+
+            }
         }
     }
 

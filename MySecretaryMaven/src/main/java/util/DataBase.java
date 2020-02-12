@@ -48,13 +48,14 @@ public class DataBase {
         HashSet<VkBotUser> users = new HashSet<>();
         try {
             Statement statement = conn.createStatement();
-            ResultSet set = statement.executeQuery("SELECT email,accessToken,id,reply FROM bot_users");
+            ResultSet set = statement.executeQuery("SELECT email,accessToken,id,reply,onPause FROM bot_users");
             while (set.next()) {
                 String email = set.getString("email");
                 String accessToken = set.getString("accessToken");
                 int id = set.getInt("id");
                 String reply = set.getString("reply");
-                users.add(new VkBotUser(email, accessToken, id, reply));
+                Boolean isOnPause = set.getBoolean("onPause");
+                users.add(new VkBotUser(email, accessToken, id, reply, isOnPause));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,6 +73,20 @@ public class DataBase {
 
     public void deleteUser(int id) throws SQLException {
         String query = "DELETE  from bot_users WHERE bot_users.id=?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        preparedStatement.execute();
+    }
+
+    public void pauseUser(int id) throws SQLException {
+        String query = "UPDATE   bot_users SET onPause=1 WHERE bot_users.id=?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        preparedStatement.execute();
+    }
+
+    public void resumeUser(int id) throws SQLException {
+        String query = "UPDATE   bot_users SET onPause=0 WHERE bot_users.id=?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setInt(1, id);
         preparedStatement.execute();
