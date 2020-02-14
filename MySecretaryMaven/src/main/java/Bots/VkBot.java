@@ -26,7 +26,6 @@ public class VkBot extends User implements bot {
         this.email = email;
         this.user = user;
         enableLoggingUpdates(false);
-        enableTyping(true);
         this.key = key;
         this.vk_id = vk_id;
         this.secretary = secretary;
