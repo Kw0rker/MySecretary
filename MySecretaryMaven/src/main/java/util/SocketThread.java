@@ -44,7 +44,7 @@ public class SocketThread implements Runnable {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(Thread.currentThread(), e);
         }
     }
 }

@@ -2,6 +2,7 @@ package Bots;
 
 import interfaces.answerable;
 import util.CleverParser;
+import util.ExceptionHandler;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ public class AI implements answerable {
         try {
             parser.init();
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(Thread.currentThread(), e);
         }
     }
 
@@ -38,7 +39,7 @@ public class AI implements answerable {
         try {
             parser.init();
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(Thread.currentThread(), e);
         }
     }
 

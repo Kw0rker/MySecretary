@@ -1,6 +1,7 @@
 package Vk;
 
 import Launchers.launcher;
+import util.ExceptionHandler;
 
 import java.awt.*;
 import java.io.IOException;
@@ -52,7 +53,7 @@ class VkOauth {
             id = Integer.parseInt(link.split("user_id=")[1].split("&")[0]);
             return id;
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(Thread.currentThread(), e);
             return 0;
         }
     }

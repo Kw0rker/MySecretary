@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import interfaces.SocketListener;
 import javafx.util.Pair;
 import users.VkBotUser;
+import util.ExceptionHandler;
 import util.SocketThread;
 
 import java.io.InputStreamReader;
@@ -50,14 +51,14 @@ public class VkBotParser implements SocketListener {
                 int id = Integer.parseInt(message.split("-")[1]);
                 secretary.stopUser(id);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                ExceptionHandler.logException(Thread.currentThread(), e);
             }
         } else if (message.contains("resume")) {
             try {
                 int id = Integer.parseInt(message.split("-")[1]);
                 secretary.resumeUser(id);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                ExceptionHandler.logException(Thread.currentThread(), e);
             }
         } else if (message.contains("changeReply-")) {
             try {
@@ -65,14 +66,14 @@ public class VkBotParser implements SocketListener {
                 secretary.changeReply(params[0], Integer.parseInt(params[1]));
                 System.out.println(Arrays.toString(params));
             } catch (Exception e) {
-                e.printStackTrace();
+                ExceptionHandler.logException(Thread.currentThread(), e);
             }
         } else if (message.contains("delete")) {
             try {
                 int id = Integer.parseInt(message.split("-")[1]);
                 secretary.deleteUser(id);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                ExceptionHandler.logException(Thread.currentThread(), e);
             }
         } else {
             Gson gson = new Gson();
@@ -81,7 +82,7 @@ public class VkBotParser implements SocketListener {
             ReplyBot replyBot = new ReplyBot();
             replyBot.setReply(user.getReply());
             new Thread(() -> {
-                VkBot bot = new VkBot(secretary, user, replyBot);
+                VkBot bot = new VkBot(secretary, user, replyBot.getInstance());
                 bot.enableTyping(false);
                 secretary.addNewUser(new Pair<>(user, bot));
             }).start();

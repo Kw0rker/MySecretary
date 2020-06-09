@@ -11,6 +11,7 @@ import javafx.util.Pair;
 import users.VkBotUser;
 import users.user;
 import util.DataBase;
+import util.ExceptionHandler;
 import util.SendEmailSMTP;
 
 import java.sql.SQLException;
@@ -31,6 +32,7 @@ public class Secretary {
 
     public Secretary(launcher launcher) {
         instance = this;
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         this.launcher = launcher;
         new VkBotParser(this);
         dataBase = new DataBase();
@@ -46,6 +48,7 @@ public class Secretary {
     }
 
     public void redirect(String message, String name, String email) {
+        System.out.println(message);
         for (Redirect service : redirectsServices) service.redirectMessage(message, name, this, email);
     }
 
@@ -68,11 +71,12 @@ public class Secretary {
             replyBot.setReply(user.getReply());
             Pair<user, bot> pair;
             Thread thread1 = new Thread(() -> {
-                VkBot bot = new VkBot(instance, user, replyBot);
+                VkBot bot = new VkBot(instance, user, replyBot.getInstance());
                 bot.setup();
                 threads.add(new botThread(instance, new Pair<>(user, bot)));
             });
             thread1.start();
+            System.out.println("Thread started");
 
         }
     }
@@ -116,7 +120,7 @@ public class Secretary {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(Thread.currentThread(), e);
             return;
         }
     }
@@ -127,7 +131,7 @@ public class Secretary {
             dataBase.changeReply(reply, id);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(Thread.currentThread(), e);
             return;
         }
         for (botThread thread : threads) {
@@ -143,7 +147,7 @@ public class Secretary {
         try {
             dataBase.insert((VkBotUser) pair.getKey());
         } catch (SQLException e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(Thread.currentThread(), e);
             return;//If any sql exception occurs dont create a new thread also if user is already in db
         }
         this.threads.add(new botThread(this, pair));

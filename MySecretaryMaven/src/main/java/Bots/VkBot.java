@@ -8,6 +8,7 @@ import com.petersamokhin.bots.sdk.utils.web.Connection;
 import interfaces.answerable;
 import interfaces.bot;
 import users.user;
+import util.ExceptionHandler;
 
 public class VkBot extends User implements bot {
     private Secretary secretary;
@@ -27,7 +28,7 @@ public class VkBot extends User implements bot {
         this.user = user;
         enableLoggingUpdates(false);
         this.key = key;
-        this.vk_id = vk_id;
+        this.vk_id = user.getId();
         this.secretary = secretary;
         if (user.isOnPause()) {
             Answerable = secretary.launcher;
@@ -76,9 +77,11 @@ public class VkBot extends User implements bot {
                  */
                 return new VkUser(name, last_name, respond.contains("\"online\":1"));
             } catch (Exception e) {
+                ExceptionHandler.logException(Thread.currentThread(), e);
                 return new VkUser();
             }
         } catch (Exception e) {
+            ExceptionHandler.logException(Thread.currentThread(), e);
             return new VkUser();
         }
     }
