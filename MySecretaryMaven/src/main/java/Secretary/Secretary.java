@@ -126,6 +126,7 @@ public class Secretary {
     }
 
     public void changeReply(String reply, int id) {
+        reply = reply.replace("<br>", "\n");
         System.out.println(threads.size());
         try {
             dataBase.changeReply(reply, id);

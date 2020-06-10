@@ -64,10 +64,11 @@ public class VkBot extends User implements bot {
     }
 
     public static VkUser getUserById(int id) {
-        String request = "https://api.vk.com/method/users.get?access_token=1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63&user_id=" + id + "&fields=online&v=5.00";
+        String request = "https://api.vk.com/method/users.get?access_token=1016899c1016899c1016899cf110786606110161016899c4e07feafbe57356a264ebd63&user_id=" + id + "&fields=online&v=5.21";
         String respond = Connection.getRequestResponse(request);
         System.gc();
         try {
+            System.out.println(respond);
             String name = respond.split("\"first_name\":\"")[1].split("\",")[0];
             try {
                 String last_name = respond.split("\"last_name\":\"")[1].split("\",")[0];

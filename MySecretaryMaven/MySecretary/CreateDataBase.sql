@@ -4,4 +4,5 @@ create TABLE `mysecretary`.`bot_users`(
   `accessToken` VARCHAR(100) NOT NULL,
   `id` INT NOT NULL,
   `reply` VARCHAR(300) NOT NULL,
+  `onPause` TINYINT(1) NOT NULL,
   PRIMARY KEY (`id`));

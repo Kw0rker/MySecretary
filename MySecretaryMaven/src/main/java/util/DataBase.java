@@ -31,12 +31,13 @@ public class DataBase {
             String accessToken = user.getAccessToken();
             int id = user.getId();
             String reply = user.getReply();
-        String request = "INSERT INTO bot_users  (email, accessToken, id, reply)" + " values (?,?,?,?)";
+        String request = "INSERT INTO bot_users  (email, accessToken, id, reply,onPause)" + " values (?,?,?,?,?)";
         PreparedStatement preparedStatement = conn.prepareStatement(request);
         preparedStatement.setString(1, email);
         preparedStatement.setString(2, accessToken);
         preparedStatement.setInt(3, id);
         preparedStatement.setString(4, reply);
+        preparedStatement.setInt(5, 0);
         preparedStatement.execute();
     }
 
@@ -54,7 +55,7 @@ public class DataBase {
                 String accessToken = set.getString("accessToken");
                 int id = set.getInt("id");
                 String reply = set.getString("reply");
-                Boolean isOnPause = set.getBoolean("onPause");
+                boolean isOnPause = set.getInt("onPause") == 1;
                 users.add(new VkBotUser(email, accessToken, id, reply, isOnPause));
             }
         } catch (SQLException e) {

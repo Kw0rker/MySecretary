@@ -17,10 +17,13 @@ public class ReplyBot implements answerable {
 
     public void setReply(String reply) {
         instance = this;
-        if (reply.equals("def")) this.reply = reply;
+        if (reply.equals("def")) return;
         else if (reply.equals("AI")) {
             instance = new AI();
-        } else this.reply = reply;
+        } else {
+            reply = reply.replace("<br>", "\n");
+            this.reply = reply;
+        }
         System.out.println(reply);
     }
 
