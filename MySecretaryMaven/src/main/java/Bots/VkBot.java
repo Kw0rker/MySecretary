@@ -68,7 +68,6 @@ public class VkBot extends User implements bot {
         String respond = Connection.getRequestResponse(request);
         System.gc();
         try {
-            System.out.println(respond);
             String name = respond.split("\"first_name\":\"")[1].split("\",")[0];
             try {
                 String last_name = respond.split("\"last_name\":\"")[1].split("\",")[0];

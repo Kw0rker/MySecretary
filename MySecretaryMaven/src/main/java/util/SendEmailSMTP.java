@@ -15,7 +15,7 @@ import java.util.Properties;
 public class SendEmailSMTP implements Redirect {
     private static final String SMTP_SERVER = "smtp.gmail.com";
     private static final String USERNAME = "mysecretaryautoreply@gmail.com";
-    private static final String PASSWORD = "Secretary?";
+    private static final String PASSWORD = "ammtrhzvmzjnxcwr";
     private static final String EMAIL_FROM = USERNAME;
     private static final String EMAIL_TO_CC = "";
 
