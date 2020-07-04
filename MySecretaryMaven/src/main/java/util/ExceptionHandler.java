@@ -2,6 +2,10 @@ package util;
 
 import Secretary.Secretary;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
     static private final String email = "ruslankhamroev@gmail.com";
     static Secretary secretary;
@@ -17,6 +21,20 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
             exception.append("CRITICAL ERROR\n");
         exception.append("Exception occurred in Thread with id: ").append(t.getId());
         for (StackTraceElement el : elements) exception.append(el.toString()).append("\n   ");
+        File file = new File("/home/exception.log");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        try {
+            FileWriter writer = new FileWriter(file);
+            writer.write(exception.toString());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         secretary.redirect(exception.toString(), "Exception Handled", email);
 
     }
