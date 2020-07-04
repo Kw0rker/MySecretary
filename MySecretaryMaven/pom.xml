@@ -23,7 +23,6 @@
     </repositories>
     <build>
         <finalName>MySecretaryBack</finalName>
-        <sourceDirectory>MySecretary</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
